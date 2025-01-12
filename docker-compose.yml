@@ -1,0 +1,130 @@
+x-logging: &default-logging
+  logging:
+    driver: "json-file"
+    options:
+      max-size: "10m"
+      max-file: "3"
+
+x-healthcheck: &default-healthcheck
+  interval: 10s
+  timeout: 5s
+  retries: 3
+
+networks:
+  ekfc_network:
+    driver: bridge
+    name: ekfc_network
+
+services:
+  rabbitmq:
+    image: rabbitmq:4-management
+    container_name: ${PROJECT_NAME}_rabbitmq
+    restart: unless-stopped
+    ports:
+      - "5673:5672"
+      - "15673:15672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    networks:
+      - ekfc_network
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "check_port_connectivity"]
+      <<: *default-healthcheck
+    <<: *default-logging
+
+  mongodb:
+    image: mongo:latest
+    container_name: ${PROJECT_NAME}_mongodb
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+      MONGO_INITDB_DATABASE: users_ms_db
+    ports:
+      - "27018:27017"
+    volumes:
+      - mongodb_data:/data/db
+      - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+    networks:
+      - ekfc_network
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      <<: *default-healthcheck
+    <<: *default-logging
+
+  mongoku:
+    image: huggingface/mongoku:latest
+    container_name: ${PROJECT_NAME}_mongoku
+    restart: unless-stopped
+    ports:
+      - "8082:3100"
+    environment:
+      - MONGOKU_DEFAULT_HOST=mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@mongodb:27017/?authSource=admin
+    networks:
+      - ekfc_network
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    <<: *default-logging
+
+  users_ms:
+    image: ${USERS_MS_IMAGE_NAME}:${USERS_MS_IMAGE_TAG}
+    build:
+      context: ./users-ms
+      dockerfile: Dockerfile
+    container_name: ${PROJECT_NAME}_users_ms
+    restart: unless-stopped
+    env_file:
+      - ./users-ms/.env
+    volumes:
+      - ./users-ms:/var/www/users-ms:delegated
+      - users_ms_node_modules:/var/www/users-ms/node_modules
+    ports:
+      - "4003:4003"
+      - "4005:4005"
+    networks:
+      - ekfc_network
+    depends_on:
+      mongodb:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    <<: *default-logging
+
+  blogs_ms:
+    image: ${BLOGS_MS_IMAGE_NAME}:${BLOGS_MS_IMAGE_TAG}
+    build:
+      context: ./blogs-ms
+      dockerfile: Dockerfile
+    container_name: ${PROJECT_NAME}_blogs_ms
+    restart: unless-stopped
+    env_file:
+      - ./blogs-ms/.env
+    volumes:
+      - ./blogs-ms:/var/www/blogs-ms:delegated
+      - blogs_ms_node_modules:/var/www/blogs-ms/node_modules
+    ports:
+      - "4004:4004"
+    networks:
+      - ekfc_network
+    depends_on:
+      mongodb:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    <<: *default-logging
+
+volumes:
+  mongodb_data:
+    name: ${PROJECT_NAME}_mongodb_data
+  rabbitmq_data:
+    name: ${PROJECT_NAME}_rabbitmq_data
+  users_ms_node_modules:
+    name: ${PROJECT_NAME}_users_ms_node_modules
+  blogs_ms_node_modules:
+    name: ${PROJECT_NAME}_blogs_ms_node_modules
+
+
