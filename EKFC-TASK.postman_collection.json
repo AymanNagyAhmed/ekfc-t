@@ -1,0 +1,442 @@
+{
+	"info": {
+		"_postman_id": "1a7c9541-e03e-4426-89ab-edbd58684001",
+		"name": "EKFC-TASK",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24578523"
+	},
+	"item": [
+		{
+			"name": "AUTH",
+			"item": [
+				{
+					"name": "login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Extract Access Token\", () => {",
+									"    const jsonData = pm.response.json();",
+									"    const accessToken = jsonData.data.access_token;",
+									"",
+									"    pm.collectionVariables.set(\"ACCESS_TOKEN\", accessToken);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\":\"test1@test.com\",\n    \"password\":\"123456789\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{USERS_MS_URL}}/auth/login",
+							"host": [
+								"{{USERS_MS_URL}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Register",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Extract Access Token\", () => {",
+									"    const jsonData = pm.response.json();",
+									"    const accessToken = jsonData.data.access_token;",
+									"",
+									"    pm.collectionVariables.set(\"ACCESS_TOKEN\", accessToken);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\":\"user@test.com\",\n    \"password\":\"123456789\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{USERS_MS_URL}}/auth/register",
+							"host": [
+								"{{USERS_MS_URL}}"
+							],
+							"path": [
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Logout",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Extract Access Token\", () => {",
+									"    const jsonData = pm.response.json();",
+									"    const accessToken = jsonData.data.access_token;",
+									"",
+									"    pm.collectionVariables.set(\"ACCESS_TOKEN\", accessToken);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\":\"user1@test.com\",\n    \"password\":\"123456789\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{USERS_MS_URL}}/auth/logout",
+							"host": [
+								"{{USERS_MS_URL}}"
+							],
+							"path": [
+								"auth",
+								"logout"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "USERS",
+			"item": [
+				{
+					"name": "List",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{USERS_MS_URL}}/users",
+							"host": [
+								"{{USERS_MS_URL}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get one",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{USERS_MS_URL}}/users/profile",
+							"host": [
+								"{{USERS_MS_URL}}"
+							],
+							"path": [
+								"users",
+								"profile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\":\"user60@test.com\",\n    \"password\":\"123456789\"   \n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{USERS_MS_URL}}/users",
+							"host": [
+								"{{USERS_MS_URL}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"firstName\":\"test7777\"\n}"
+						},
+						"url": {
+							"raw": "{{USERS_MS_URL}}/users/profile",
+							"host": [
+								"{{USERS_MS_URL}}"
+							],
+							"path": [
+								"users",
+								"profile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{USERS_MS_URL}}/users/profile",
+							"host": [
+								"{{USERS_MS_URL}}"
+							],
+							"path": [
+								"users",
+								"profile"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "POSTS",
+			"item": [
+				{
+					"name": "List",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{USERS_MS_URL}}/posts",
+							"host": [
+								"{{USERS_MS_URL}}"
+							],
+							"path": [
+								"posts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get one",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{USERS_MS_URL}}/posts/6767279b22f020b10abead14",
+							"host": [
+								"{{USERS_MS_URL}}"
+							],
+							"path": [
+								"posts",
+								"6767279b22f020b10abead14"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\":\"post 22\",\n    \"content\":\"post 2 content\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{USERS_MS_URL}}/posts",
+							"host": [
+								"{{USERS_MS_URL}}"
+							],
+							"path": [
+								"posts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\":\"post 1\",\n    \"content\":\"post 666 content\"\n}"
+						},
+						"url": {
+							"raw": "{{USERS_MS_URL}}/posts/676ca7e8346acbc0127709aa",
+							"host": [
+								"{{USERS_MS_URL}}"
+							],
+							"path": [
+								"posts",
+								"676ca7e8346acbc0127709aa"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{USERS_MS_URL}}/posts/676ca5a8dab2dab50bf5c358",
+							"host": [
+								"{{USERS_MS_URL}}"
+							],
+							"path": [
+								"posts",
+								"676ca5a8dab2dab50bf5c358"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "USERS_MS_URL",
+			"value": "http://localhost:4003/api",
+			"type": "string"
+		},
+		{
+			"key": "ACCESS_TOKEN",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "BLOGS_MS_URL",
+			"value": "http://localhost:4004/api",
+			"type": "string"
+		}
+	]
+}

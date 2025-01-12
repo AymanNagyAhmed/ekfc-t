@@ -1,0 +1,455 @@
+# Shared Development Standards
+
+## General Principles
+- Use English for all code and documentation
+- Follow DRY (Don't Repeat Yourself) principles
+- Write clean, readable, and maintainable code
+- Use proper error handling
+- Implement proper logging
+- Follow security best practices
+
+## Code Style & Formatting
+- Use descriptive variable and function names
+- Use PascalCase for classes/interfaces/types
+- Use camelCase for variables/functions/methods
+- Use kebab-case for file/directory names
+- Use UPPERCASE for environment variables
+- Avoid magic numbers and define constants
+- Start function names with verbs
+- Use verbs for boolean variables (is*, has*, can*, etc.)
+- Use complete words instead of abbreviations
+- Keep functions small and focused (< 20 lines)
+- Implement proper error boundaries
+- Use early returns for better readability
+
+## Documentation Standards
+- Document all public APIs and functions
+- Use JSDoc for documentation
+- Include examples in documentation
+- Document edge cases and limitations
+- Keep documentation up to date
+- Use proper markdown formatting
+- Include links to related documentation
+- Document breaking changes
+
+## Testing Standards
+- Write unit tests for all public functions
+- Follow AAA (Arrange-Act-Assert) pattern
+- Test edge cases and error scenarios
+- Mock external dependencies
+- Maintain high test coverage
+- Write integration tests
+- Write e2e tests for critical flows
+- Test accessibility features
+- Test performance metrics
+
+## Import & Path Standards
+- Use path aliases instead of relative paths
+- Configure proper path aliases in tsconfig.json
+- Group imports logically:
+  1. External packages
+  2. Internal aliases
+  3. Types/interfaces
+- Use barrel exports for cleaner imports
+
+## Environment Variables
+- Use .env files for configuration
+- Never commit sensitive information
+- Use appropriate defaults
+- Validate environment variables
+- Follow naming conventions:
+  - Use UPPERCASE
+  - Use underscores for separation
+  - Prefix with project name
+- Maintain separate files:
+  - .env.development
+  - .env.test
+  - .env.production
+  - .env.example
+
+## Docker Standards
+### Image Standards
+- Use specific version tags, never 'latest'
+- Use multi-stage builds for production
+- Minimize image size
+- Follow security best practices
+- Use proper base images
+
+### Volume Management
+- Use named volumes for persistent data
+- Follow naming convention: project_purpose_vol
+- Use bind mounts for development
+
+### Port Mapping
+- Add +1 to default external ports
+- Document port mappings
+- Avoid port conflicts
+- Use consistent port offset pattern
+
+### Security
+- Follow principle of least privilege
+- Use non-root users
+- Secure sensitive variables
+- Configure proper network isolation
+- Regular security updates
+
+## Git Standards
+- Use meaningful commit messages
+- Follow conventional commits
+- Keep commits focused and atomic
+- Use proper branch naming
+- Review code before merging
+- Maintain clean git history
+
+## Type Safety
+- Use TypeScript for type safety
+- Avoid using 'any'
+- Create necessary types/interfaces
+- Use proper generics
+- Implement proper type guards
+- Use strict type checking
+
+## SOLID Principles
+- Single Responsibility Principle
+- Open/Closed Principle
+- Liskov Substitution Principle
+- Interface Segregation Principle
+- Dependency Inversion Principle
+
+## Error Handling
+- Use proper error classes
+- Implement proper error boundaries
+- Handle async errors properly
+- Log errors appropriately
+- Provide meaningful error messages
+- Use global error handlers
+
+## Performance
+- Implement proper caching
+- Use lazy loading
+- Optimize bundle size
+- Monitor performance metrics
+- Use proper memory management
+- Implement proper rate limiting
+
+## Security
+- Implement proper authentication
+- Use proper authorization
+- Validate all inputs
+- Sanitize all outputs
+- Use proper CORS policies
+- Implement proper CSP headers
+- Regular security audits
+
+# Project Type Specific Standards
+
+## Backend Standards
+[Include link to .cursorrules.backend]
+
+## Frontend Standards
+[Include link to .cursorrules.frontend]
+
+# Backend Development Standards
+
+## TypeScript General Guidelines
+### Basic Principles
+- Use English for all code and documentation
+- Always declare the type of each variable and function (parameters and return value)
+- Avoid using any
+- Create necessary types
+- Use JSDoc to document public classes and methods
+- Don't leave blank lines within a function
+- One export per file
+- Use path aliases for imports instead of relative paths
+- Combine multiple imports from the same library into a single import statement
+
+### Functions
+- Write short functions with a single purpose. Less than 20 instructions
+- Name functions with a verb and something else
+- If it returns a boolean, use isX or hasX, canX, etc.
+- If it doesn't return anything, use executeX or saveX, etc.
+- Avoid nesting blocks by:
+  - Early checks and returns
+  - Extraction to utility functions
+- Use higher-order functions (map, filter, reduce, etc.) to avoid function nesting
+- Use arrow functions for simple functions (less than 3 instructions)
+- Use named functions for non-simple functions
+- Use default parameter values instead of checking for null or undefined
+- Reduce function parameters using RO-RO
+- Use an object to pass multiple parameters
+- Use an object to return results
+- Declare necessary types for input arguments and output
+- Use a single level of abstraction
+
+### Data
+- Don't abuse primitive types and encapsulate data in composite types
+- Avoid data validations in functions and use classes with internal validation
+- Prefer immutability for data
+- Use readonly for data that doesn't change
+- Use as const for literals that don't change
+
+### Classes
+- Follow SOLID principles
+- Prefer composition over inheritance
+- Declare interfaces to define contracts
+- Write small classes with a single purpose
+- Less than 200 instructions
+- Less than 10 public methods
+- Less than 10 properties
+
+### Exceptions
+- Use exceptions to handle errors you don't expect
+- If you catch an exception, it should be to:
+  - Fix an expected problem
+  - Add context
+- Otherwise, use a global handler
+
+## Specific to NestJS
+
+### Basic Principles
+- Use modular architecture
+- Encapsulate the API in modules
+- One module per main domain/route
+- One controller for its route
+- And other controllers for secondary routes
+- A models folder with data types
+- DTOs validated with class-validator for inputs
+- Declare simple types for outputs
+- A services module with business logic and persistence
+- Entities with MikroORM for data persistence
+- One service per entity
+- A core module for nest artifacts
+- Global filters for exception handling
+- Global middlewares for request management
+- Guards for permission management
+- Interceptors for request management
+- A shared module for services shared between modules
+- Utilities - Shared business logic
+
+## Database and TypeORM Conventions
+
+### Column Naming
+- Use `snake_case` for database column names
+- Use `camelCase` for entity properties
+- Always use the `name` parameter in `@Column` decorator
+- Examples:
+  - Database column: `first_name`, Entity property: `firstName`
+  - Database column: `phone_number`, Entity property: `phoneNumber`
+  - Database column: `is_active`, Entity property: `isActive`
+  - Database column: `created_at`, Entity property: `createdAt`
+
+### Index Naming
+- Use meaningful and unique index names
+- Follow pattern: `IDX_entityName_columnName`
+- For composite indexes: `IDX_entityName_column1_column2`
+
+### Database Character Set and Collation Standards
+- Always use UTF-8 with full Unicode support
+- Configure at both connection and database level
+- Use `utf8mb4` for MySQL/MariaDB
+
+## Query Building and Data Access Patterns
+- Follow Single Responsibility Principle
+- Implement reusable query building logic
+- Use TypeORM best practices
+- Implement proper validation
+
+### Pagination Standards
+- Use standardized pagination DTOs
+- Implement proper pagination handling
+
+## Code Organization and DRY Principles
+- Use DTO inheritance for shared properties
+- Avoid duplicate pagination/filtering options
+- Extend base DTOs for specific use cases
+
+## Testing Standards
+### Service Testing
+- Mock all external dependencies (Model, Services)
+- Use proper type definitions for mocks
+- Test all service methods
+- Include error cases
+
+### Testing Mock Data Standards
+- Create complete mock objects matching schema
+- Include all required fields
+- Use realistic test data
+- Follow type definitions
+
+## Docker and Containerization Standards
+### Docker Configuration
+- Use appropriate .dockerignore file
+- Optimize layer caching
+- Include only necessary files
+- Set proper working directory
+- Use non-root users when possible
+- Configure proper environment variables
+
+### Development Workflow
+- Enable hot reload for development
+- Mount source code as volumes in development
+- Use nodemon or similar tools for auto-restart
+- Configure proper file watching
+- Optimize build time for development
+
+### Production Deployment
+- Use multi-stage builds
+- Minimize image size
+- Include only production dependencies
+- Configure proper security settings
+- Set appropriate environment variables
+- Use production-optimized configurations
+
+### Database Container Standards
+- Use official database images
+- Configure proper character sets and collations
+- Set appropriate volume mappings
+- Configure backup strategies
+- Set proper access credentials
+- Configure appropriate network access
+
+### Logging Standards
+- Configure appropriate logging drivers
+- Set log rotation policies
+- Use structured logging
+- Configure proper log levels
+- Enable debug logging in development
+
+# Frontend Development Standards
+
+## React/Next.js Best Practices
+
+### Component Structure
+- Use functional components with hooks
+- Keep components small and focused
+- Follow single responsibility principle
+- Use proper prop typing
+- Implement proper error boundaries
+- Use proper loading states
+- Implement proper accessibility features
+
+### Routing & Navigation
+- Use the App Router (`app/` directory) for new projects
+- Implement layouts for shared UI across routes
+- Use Server Components by default, Client Components when needed
+- Follow the file-system based routing conventions:
+  - `page.tsx` for routes
+  - `layout.tsx` for layouts
+  - `loading.tsx` for loading states
+  - `error.tsx` for error handling
+  - `not-found.tsx` for 404 pages
+
+### Data Fetching
+- Use Server Components for data fetching when possible
+- Implement proper caching strategies using fetch options
+- Use React Server Actions for mutations
+- Utilize route handlers for API endpoints
+- Implement proper error handling and loading states
+
+### Rendering & Performance
+- Use Streaming and Suspense for progressive loading
+- Implement proper component-level caching
+- Use Partial Prerendering (PPR) for optimal performance
+- Implement proper lazy loading strategies
+- Use Image and Font optimization components
+
+### State Management & Components
+- Use Server Components for static content
+- Implement Client Components only when needed for interactivity
+- Follow proper component composition patterns
+- Use proper data fetching patterns in Server Components
+- Implement proper error boundaries
+
+### Component Composition & Reusability
+- Break down complex UI into smaller, reusable components
+- Follow atomic design principles:
+  - Atoms (basic building blocks)
+  - Molecules (simple combinations)
+  - Organisms (complex combinations)
+  - Templates (page layouts)
+- Use composition over inheritance
+- Implement proper prop drilling prevention
+
+### Responsive Design with Tailwind CSS
+- Use Tailwind's responsive prefixes consistently
+- Always design for mobile first, then scale up
+- Use flexible grid systems
+- Implement proper spacing scales
+- Use container queries when needed
+- Test layouts at all breakpoints
+
+### Testing Standards
+- Test user interactions
+- Test accessibility features
+- Test performance metrics
+- Test responsive layouts
+- Test error states
+- Test loading states
+- Test edge cases
+
+### Documentation
+- Document component props
+- Document component usage
+- Document component limitations
+- Document breaking changes
+- Include examples
+- Use proper JSDoc comments
+- Maintain changelog
+
+### Optimization
+- Use built-in Image component for image optimization
+- Implement proper font optimization with next/font
+- Use route handlers for API endpoints
+- Implement proper metadata for SEO
+- Use proper static asset handling
+
+### Security
+- Implement proper authentication strategies
+- Use proper CORS policies
+- Implement proper API route protection
+- Use proper environment variable handling
+- Implement proper CSP headers
+
+### Development Workflow
+- Use the new app directory structure
+- Implement proper TypeScript configuration
+- Use proper environment variables
+- Follow proper deployment practices
+- Implement proper testing strategies
+
+### Import Path Standards
+#### Required Alias Usage
+- ALWAYS use alias paths (`@/*`) for imports instead of relative paths
+- Group imports logically:
+  1. External packages
+  2. Aliased imports (grouped by type)
+  3. Types and interfaces
+
+#### Path Alias Structure
+Always use these standard aliases:
+- `@/components/*` - React components
+- `@/lib/*` - Core utilities and services
+- `@/hooks/*` - Custom React hooks
+- `@/utils/*` - Helper functions
+- `@/types/*` - TypeScript types/interfaces
+- `@/styles/*` - Style-related files
+- `@/constants/*` - Constants and enums
+- `@/context/*` - React Context providers
+- `@/store/*` - State management
+- `@/api/*` - API-related functions
+
+### Type vs Interface Guidelines
+- Use interfaces for object definitions that might need to be extended
+- Use interfaces for API responses and data models
+- Use interfaces for component props
+- Use types for union types
+- Use types for function types
+- Use types for complex type manipulations
+- Use types for utility types
+
+### Testing Documentation
+- Document test scenarios
+- Document test setup
+- Document test data
+- Document test utilities
+- Document test coverage requirements
